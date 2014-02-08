@@ -10,7 +10,96 @@ using namespace std;
 //Licensed under GNU GPL verison 2
 //or any later version at your discretion
 
-class 
+class pageinst
+{
+	private:
+	long instruction;
+	pageinst* next;
+
+	public:
+	pageinst(long inst);
+	long getinst(void);
+	pageinst* getnext(void);
+	void setnext(pageinst* newinst);
+};
+
+pageinst::pageinst(long inst)
+{
+	instruction = inst;
+	next = NULL;
+}
+
+long pageinst::getinst(void)
+{
+	return instruction;
+}
+
+pageinst* pageinst::getnext(void)
+{
+	return next
+}
+
+void pageinst::setnext(pageinst* newinst)
+{
+	next = newinst;
+}
+
+class pagechain
+{
+	private:
+	long page;
+	pageinst* head;
+	pageinst* tail;
+
+	public:
+	pagechain(long where);
+	pageinst* gethead(void);
+	void sethead(pageinst* newhead);
+	pageinst* gettail(void);
+	void settail(pageinst* newtail);
+};
+
+pagechain::pagechain(long where)
+{
+	page = where;
+	head = NULL;
+	tail = NULL;
+}
+
+pageinst* pagechain::gethead(void)
+{
+	return head;
+}
+
+void pagechain::sethead(pageinst* newhead)
+{
+	pageinst* oldhead = gethead();
+	head = newhead;
+	if (oldhead) {
+		newhead->setnext(oldhead);
+	}
+	if (!gettail()) {
+		tail = newhead;
+	}
+}
+
+pageinst* pagechain::gettail(void)
+{
+	return tail;
+}
+
+void pagechain::settail(pageinst* newtail)
+{
+	pageinst* oldtail = gettail();
+	tail = newtail;
+	if (oldtail) {
+		oldtail->setnext(newtail);
+	}
+	if (!gethead()) {
+		head = newtail;
+	}
+}
+
 
 extern "C" {
 
