@@ -6,6 +6,8 @@ using namespace std;
 // Licensed under the GNU GPL version 2
 // or any later version at your discretion
 
+#ifndef _RBTREECPP_
+#define _RBTREECPP_
 
 template <typename T>
 class redblacknode{
@@ -14,14 +16,6 @@ class redblacknode{
 		redblacknode<Z>* rbtp);
 	template <typename Z> friend void 
 		streamrbt(ostream& os, redblacknode<Z>* node);
-	template <typename Z> friend void
-		drawnextroot(redblacknode<Z>* node, int, ostream&);
-	template <typename Z> friend void
-		drawTEXtree(redblacknode<Z>* node, ostream&);
-	template <typename Z> friend void
-		drawnextxml(redblacknode<Z>* node, int, int&, ostream&);
-	template <typename Z> friend void
-		drawGraphMLtree(redblacknode<Z>* node, ostream&);
 
 	private:
 		T value;
@@ -709,42 +703,4 @@ template <typename T> ostream& operator<<(ostream& os, redblacknode<T>* rbn)
 	return os;
 }		
 
-template <typename T> void drawGraphMLtree(redblacknode<T>* rbn,
-		ostream& outstream)
-{
-	outstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
-	outstream <<
-		"<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\""
-		<< endl;
-	outstream <<
-		"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
-		<< endl;
-	outstream <<
-		"xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns"
-		<< endl;
-	outstream <<
-		"http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">"
-		<< endl;
-	outstream <<
-		"<key id=\"c\" for=\"node\" ";
-	outstream << "attr.name=\"colour\" attr.type=\"string\" >" << endl;
-	outstream << "<default>black</default>" << endl;
-	outstream << "</key>" << endl;
-	outstream <<
-		"<key id=\"v\" for=\"node\" attr.name=\"value\" ";
-	outstream << "attr.type=\"string\" >" << endl;
-	outstream << "<default>NULL</default>" << endl;
-	outstream << "</key>" << endl;
-#ifdef ADDITIONAL_INFO
-	outstream <<
-		"<key id=\"additional\" for=\"node\" attr.name=\"value\" ";
-	outstream << "attr.type=\"string\" />" << endl;
 #endif
-	outstream << "<graph id=\"redblacktree-";
-	time_t timenow;
-	outstream << time(&timenow) << "\" edgedefault=\"directed\">" << endl;
-	int cnt = 0;
-	if (rbn)
-		drawnextxml(rbn, 0, cnt, outstream);
-	outstream << "</graph>" << endl << "</graphml>" << endl;
-}
