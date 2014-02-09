@@ -106,31 +106,49 @@ extern "C" {
 void* createtree(void)
 {
 	redblacktree<redblacknode<pagechain> >* tree;
-	tree = new redblacktree<redblacknode<struct pagechain> >();
+	tree = new redblacktree<redblacknode<pagechain> >();
 	return static_cast<void*> tree;
 }
 
 void deletetree(void* tree)
 {
-	delete static_cast<redbacktree<redblacknode<pagechain> >*> tree;
+	delete static_cast<redbacktree<redblacknode<pagechain> >* > tree;
 }
 
-struct pagechain* getroot(void* tree)
+void* getroot(void* tree)
 {
-	return tree->root;
+	reblacktree<redblacknode<pagechain> >* nodetree =
+		static_cast<redblacktree<redblacknode<pagechain> >*> tree;
+	return static_cast<void*>(nodetreetree->root);
 }
 
-struct pagechain* getnode(long pagenumber, struct pagechain* root, void* tree)
+//if node for this page exists add to its tail
+//if node for this page does not exist, create and add to tail
+void insertinstruction(long pagenumber, long instruction, 
+	void* tree, void* root)
 {
-	struct pagechain testchain;
-	testchain.page = pagenumber
-	return tree->locatenode(&testchain, root);
+	redblacknode<pagechain>* rootnode;
+	redblacktree<redblacknode<pagechain> >* nodetree;
+	redblacknode<pagechain>* pagenode;
+	redblacknode<pagechain>* dummynode;
+		
+	rootnode = static_cast<redblacknode<pagechain>* > root;
+	nodetree = static_cast<redblacktree<redblacknode<pagechain> >* > tree;
+
+	dummynode = new redblacknode<pagechain>(instruction);
+	pagenode = tree->locatenode(dummynode, root);
+	pageinst* nextinstruction = new pageinst(instruction);
+
+	if (pagenode) {
+		pagenode->settail(nextinstruction);
+		delete dummynode;
+	} else {
+		dummynode->settail(nextinstruction);
+		tree->insertnode(dummynode, root);
+	}
 }
 
-bool addpage(long pagenumber, struct pagechain* root, void* tree)
-{
-	
-
+} //end extern "C"
 
 
 
