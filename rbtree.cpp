@@ -105,14 +105,14 @@ extern "C" {
 
 void* createtree(void)
 {
-	redblacktree<redblacknode<struct pagechain> >* tree;
+	redblacktree<redblacknode<pagechain> >* tree;
 	tree = new redblacktree<redblacknode<struct pagechain> >();
-	return tree;
+	return static_cast<void*> tree;
 }
 
 void deletetree(void* tree)
 {
-	delete tree;
+	delete static_cast<redbacktree<redblacknode<pagechain> >*> tree;
 }
 
 struct pagechain* getroot(void* tree)
