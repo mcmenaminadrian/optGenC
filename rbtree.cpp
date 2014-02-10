@@ -51,7 +51,6 @@ class pagechain
 	pageinst* tail;
 
 	public:
-	pagechain(){};
 	pagechain(long where);
 	bool operator==(pagechain&) const;
 	bool operator<(pagechain&) const;

@@ -114,10 +114,9 @@ template <typename T> void redblacknode<T>::showpostorder(redblacknode<T>* node)
 }
 
 
-template <typename T> redblacknode<T>::redblacknode(T& v)
+template <typename T> redblacknode<T>::redblacknode(T& v): value(v)
 {
 	colour = 1; //red
-	value = v;
 	up = NULL;
 	left = NULL;
 	right = NULL;

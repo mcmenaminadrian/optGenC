@@ -11,8 +11,9 @@ static void XMLCALL
 	starthandler(void *data, const XML_Char *name, const XML_Char **attr)
 {
 	int i;
-
-	if (strcmp(name, "thread") == 0) {
+	printf("INHERERERERE");
+	printf("NAME:%s\n", name);
+	if (strcmp(name, "file") == 0) {
 		for (i = 0; attr[i]; i += 2) {
 			if (strcmp(attr[i], "path") == 0) {
 				printf("File is at %s\n", attr[i + 1]);
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
 	while ((read = getline(&line, &len, inXML)) != -1) {
 		XML_Parse(p_ctrl, line, len, 0);
 		free(line);
+		line = NULL;
 	}
 
 	XML_ParserFree(p_ctrl);
