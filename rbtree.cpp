@@ -1,6 +1,5 @@
 #include <iostream>
 #include "redblack.hpp"
-#include "pagechain.hpp"
 
 using namespace std;
 
@@ -112,14 +111,14 @@ void* createtree(void)
 
 void deletetree(void* tree)
 {
-	delete static_cast<redbacktree<redblacknode<pagechain> >* > tree;
+	delete (static_cast<redbacktree<redblacknode<pagechain> >* > tree);
 }
 
 void* getroot(void* tree)
 {
-	reblacktree<redblacknode<pagechain> >* nodetree =
+	redblacktree<redblacknode<pagechain> >* nodetree =
 		static_cast<redblacktree<redblacknode<pagechain> >*> tree;
-	return static_cast<void*>(nodetreetree->root);
+	return static_cast<void*>(nodetree->root);
 }
 
 //if node for this page exists add to its tail
@@ -129,8 +128,8 @@ void insertinstruction(long pagenumber, long instruction,
 {
 	redblacknode<pagechain>* rootnode;
 	redblacktree<redblacknode<pagechain> >* nodetree;
-	redblacknode<pagechain>* pagenode;
-	redblacknode<pagechain>* dummynode;
+	pagechain* pagenode;
+	pagechain* dummynode;
 		
 	rootnode = static_cast<redblacknode<pagechain>* > root;
 	nodetree = static_cast<redblacktree<redblacknode<pagechain> >* > tree;
@@ -140,11 +139,11 @@ void insertinstruction(long pagenumber, long instruction,
 	pageinst* nextinstruction = new pageinst(instruction);
 
 	if (pagenode) {
-		pagenode->settail(nextinstruction);
+		nodetree->settail(nextinstruction);
 		delete dummynode;
 	} else {
-		dummynode->settail(nextinstruction);
-		tree->insertnode(dummynode, root);
+		dummynode->settail(dummynode);
+		nodetree->insertnode(dummynode, rootnode);
 	}
 }
 

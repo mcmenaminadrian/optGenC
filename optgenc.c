@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <expat.h>
 
 //Copyright Adrian McMenamin, 2014
@@ -6,7 +8,7 @@
 //or any later version at your discretion
 
 static void XMLCALL
-	start(void* data, XML_Char* name, XML_Char** attr)
+	starthandler(void *data, const XML_Char *name, const XML_Char **attr)
 {
 	int i;
 
@@ -19,14 +21,14 @@ static void XMLCALL
 	}
 }		
 
-int main(int argc, char* agrv[])
+int main(int argc, char *argv[])
 {
 	FILE* inXML;
 	ssize_t read;
 	char* line = NULL;
 	size_t len = 0;
 
-	XML_Parser p_ctrl = XML_Parser(NULL);
+	XML_Parser p_ctrl = XML_ParserCreate(NULL);
 	if (!p_ctrl) {
 		fprintf(stderr, "Could not create parser\n");
 		exit(-1);
@@ -41,7 +43,7 @@ int main(int argc, char* agrv[])
 	}
 
 	while ((read = getline(&line, &len, inXML)) != -1) {
-		XML_Parse(p_ctrl, line, len, false);
+		XML_Parse(p_ctrl, line, len, 0);
 		free(line);
 	}
 
