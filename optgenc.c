@@ -11,8 +11,6 @@ static void XMLCALL
 	starthandler(void *data, const XML_Char *name, const XML_Char **attr)
 {
 	int i;
-	printf("INHERERERERE");
-	printf("NAME:%s\n", name);
 	if (strcmp(name, "file") == 0) {
 		for (i = 0; attr[i]; i += 2) {
 			if (strcmp(attr[i], "path") == 0) {
