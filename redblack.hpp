@@ -28,12 +28,13 @@ class redblacknode{
 		redblacknode* up;
 		redblacknode* left;
 		redblacknode* right;
-		redblacknode(const T& v);
+		redblacknode(T& v);
 		redblacknode(redblacknode* node);
 		redblacknode(redblacknode& node);
 		redblacknode* grandparent() const;
  		redblacknode* uncle() const;
 		redblacknode* sibling() const;
+		T& getvalue();
 		bool bothchildrenblack() const;
 		bool equals(redblacknode*) const;
 		bool lessthan(redblacknode*) const;
@@ -76,6 +77,12 @@ template <typename T> const string redblacknode<T>::additional_info() const
 }
 #endif
 
+template <typename T> T& redblacknode<T>::getvalue()
+{
+	T& retval = value;
+	return retval;
+}
+
 template <typename T> void redblacknode<T>::showinorder(redblacknode<T>* node)
 									const
 {
@@ -107,7 +114,7 @@ template <typename T> void redblacknode<T>::showpostorder(redblacknode<T>* node)
 }
 
 
-template <typename T> redblacknode<T>::redblacknode(const T& v)
+template <typename T> redblacknode<T>::redblacknode(T& v)
 {
 	colour = 1; //red
 	value = v;
@@ -445,9 +452,9 @@ template <typename NODE> NODE* redblacktree<NODE>::locatenode(NODE* v,
 	if (v->equals(node))
 		return node;
 	if (v->lessthan(node))
-		locatenode(v, node->left);
+		return locatenode(v, node->left);
 	else
-		locatenode(v, node->right);
+		return locatenode(v, node->right);
 }
 
 template <typename NODE> NODE* redblacktree<NODE>::minright(NODE* node) const

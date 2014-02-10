@@ -35,7 +35,7 @@ long pageinst::getinst(void)
 
 pageinst* pageinst::getnext(void)
 {
-	return next
+	return next;
 }
 
 void pageinst::setnext(pageinst* newinst)
@@ -51,12 +51,25 @@ class pagechain
 	pageinst* tail;
 
 	public:
+	pagechain(){};
 	pagechain(long where);
+	bool operator==(pagechain&) const;
+	bool operator<(pagechain&) const;
 	pageinst* gethead(void);
 	void sethead(pageinst* newhead);
 	pageinst* gettail(void);
 	void settail(pageinst* newtail);
 };
+
+bool pagechain::operator==(pagechain& pc) const
+{
+	return (page == pc.page);
+}
+
+bool pagechain::operator<(pagechain& pc) const
+{
+	return (page < pc.page);
+}
 
 pagechain::pagechain(long where)
 {
@@ -74,12 +87,10 @@ void pagechain::sethead(pageinst* newhead)
 {
 	pageinst* oldhead = gethead();
 	head = newhead;
-	if (oldhead) {
+	if (oldhead) 
 		newhead->setnext(oldhead);
-	}
-	if (!gettail()) {
+	if (!gettail())
 		tail = newhead;
-	}
 }
 
 pageinst* pagechain::gettail(void)
@@ -91,12 +102,10 @@ void pagechain::settail(pageinst* newtail)
 {
 	pageinst* oldtail = gettail();
 	tail = newtail;
-	if (oldtail) {
+	if (oldtail)
 		oldtail->setnext(newtail);
-	}
-	if (!gethead()) {
+	if (!gethead())
 		head = newtail;
-	}
 }
 
 
@@ -106,18 +115,18 @@ void* createtree(void)
 {
 	redblacktree<redblacknode<pagechain> >* tree;
 	tree = new redblacktree<redblacknode<pagechain> >();
-	return static_cast<void*> tree;
+	return static_cast<void*>(tree);
 }
 
 void deletetree(void* tree)
 {
-	delete (static_cast<redbacktree<redblacknode<pagechain> >* > tree);
+	delete (static_cast<redblacktree<redblacknode<pagechain> >* >(tree));
 }
 
 void* getroot(void* tree)
 {
 	redblacktree<redblacknode<pagechain> >* nodetree =
-		static_cast<redblacktree<redblacknode<pagechain> >*> tree;
+		static_cast<redblacktree<redblacknode<pagechain> >*>(tree);
 	return static_cast<void*>(nodetree->root);
 }
 
@@ -126,23 +135,22 @@ void* getroot(void* tree)
 void insertinstruction(long pagenumber, long instruction, 
 	void* tree, void* root)
 {
-	redblacknode<pagechain>* rootnode;
+	redblacknode<pagechain> *rootnode, *pagenode, *dummynode;
 	redblacktree<redblacknode<pagechain> >* nodetree;
-	pagechain* pagenode;
-	pagechain* dummynode;
 		
-	rootnode = static_cast<redblacknode<pagechain>* > root;
-	nodetree = static_cast<redblacktree<redblacknode<pagechain> >* > tree;
+	pagechain dummychain = pagechain(instruction);
+	rootnode = static_cast<redblacknode<pagechain>*>(root);
+	nodetree = static_cast<redblacktree<redblacknode<pagechain> >* >(tree);
 
-	dummynode = new redblacknode<pagechain>(instruction);
-	pagenode = tree->locatenode(dummynode, root);
+	dummynode = new redblacknode<pagechain>(dummychain);
+	pagenode = nodetree->locatenode(dummynode, rootnode);
 	pageinst* nextinstruction = new pageinst(instruction);
 
 	if (pagenode) {
-		nodetree->settail(nextinstruction);
+		pagenode->getvalue().settail(nextinstruction);
 		delete dummynode;
 	} else {
-		dummynode->settail(dummynode);
+		dummynode->getvalue().settail(nextinstruction);
 		nodetree->insertnode(dummynode, rootnode);
 	}
 }

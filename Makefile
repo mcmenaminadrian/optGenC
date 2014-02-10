@@ -1,10 +1,10 @@
 all: optgenc
 
 optgenc: xmlstuff.o rbtreestuff.o
-	cc -O2 -o optgenc -Wall xmlstuff.o rbtreestuff.o -lproc
+	g++ -O2 -o optgenc -Wall xmlstuff.o rbtreestuff.o -lexpat
 
 xmlstuff.o: optgenc.c 
-	cc -O2 -o xmlstuff.o -c -Wall optgenc.c
+	gcc -O2 -o xmlstuff.o -c -Wall optgenc.c
 
 
 rbtreestuff.o: rbtree.cpp redblack.hpp
