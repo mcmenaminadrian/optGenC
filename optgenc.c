@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <expat.h>
+#include "redblack.h"
 
 #define BUFFSZ 512
 #define BITSHIFT 12
 long instructioncnt;
 void* redblacktree;
+
 
 //Copyright Adrian McMenamin, 2014
 //Licensed for use under GNU GPL v2
@@ -16,22 +18,19 @@ static void XMLCALL
 	refhandler(void *data, const XML_Char *name, const XML_Char **attr)
 {
 	int i;
-	switch (name) {
-		case "instruction":
-		case "load":
-		case "store":
-		case "modify":
+	long page, address;
+	if (strcmp(name, "instruction") == 0 || strcmp(name, "load") == 0 ||
+		strcmp(name, "store") == 0 || strcmp(name, "modify") == 0) {
 		instructioncnt++;
 		for (i = 0; attr[i]; i += 2) {
 			if (strcmp(attr[i], "address") == 0) {
-				long address = atol(attr[i + 1]);
-				long page = address >> BITSHIFT;
+				address = atol(attr[i + 1]);
+				page = address >> BITSHIFT;
 				insertinstruction(page, instructioncnt,
 					redblacktree, getroot(redblacktree));
 			}
 		}
-		printf("Instruction count %i for page %i\n", instructioncnt, page);
-		break;
+		printf("Instruction count %li for page %li\n", instructioncnt, page);
 	}
 
 }
@@ -44,7 +43,6 @@ static void XMLCALL
 	int i;
 	int done;
 	int len;
-
 
 	if (strcmp(name, "file") == 0) {
 		for (i = 0; attr[i]; i += 2) {
@@ -72,18 +70,18 @@ static void XMLCALL
 					len = fread(buffer, 1, sizeof(buffer),
 						referenceXML);
 					done = len < sizeof(buffer);
-					if (XML_Parse(p_ctrl, data, len, 0)
+					if (XML_Parse(refparse, data, len, 0)
 							== 0) {
 						enum XML_Error errcde =
-							XML_GetErrorCode(p_ctrl);
+							XML_GetErrorCode(refparse);
 						printf("ERROR: %s\n",
 							XML_ErrorString(errcde));
 						printf(
 					"Error at column number %lu\n",
-					XML_GetCurrentColumnNumber(p_ctrl));
+					XML_GetCurrentColumnNumber(refparse));
 						printf(
 					"Error at line number %lu\n",
-					XML_GetCurrentLineNumber(p_ctrl));
+					XML_GetCurrentLineNumber(refparse));
 					}
 				} while(!done);
 				deletetree(redblacktree);			
