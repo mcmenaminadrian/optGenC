@@ -4,6 +4,7 @@
 #include <expat.h>
 
 #define BUFFSZ 512
+int instructioncnt;
 
 //Copyright Adrian McMenamin, 2014
 //Licensed for use under GNU GPL v2
@@ -12,7 +13,15 @@
 static void XMLCALL
 	refhandler(void *data, const XML_Char *name, const XML_Char **attr)
 {
-
+	int i;
+	switch (name) {
+		case "instruction":
+		case "load":
+		case "store":
+		case "modify":
+		instructioncnt++;
+		for (i = 0; attr[i]; i += 2) {
+			if (strcmp(attr[i], "address") == 0) {
 }
 
 static void XMLCALL
@@ -23,6 +32,7 @@ static void XMLCALL
 	int i;
 	int done;
 	int len;
+
 
 	if (strcmp(name, "file") == 0) {
 		for (i = 0; attr[i]; i += 2) {
@@ -44,6 +54,7 @@ static void XMLCALL
 					XML_ParserFree(refparse);
 					return;
 				}
+				instructioncnt = 0;
 				do {
 					len = fread(buffer, 1, sizeof(buffer),
 						referenceXML);
