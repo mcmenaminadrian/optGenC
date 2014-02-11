@@ -3,6 +3,8 @@
 #include <string.h>
 #include <expat.h>
 
+#define BUFFSZ 512
+
 //Copyright Adrian McMenamin, 2014
 //Licensed for use under GNU GPL v2
 //or any later version at your discretion
@@ -23,9 +25,9 @@ static void XMLCALL
 int main(int argc, char *argv[])
 {
 	FILE* inXML;
-	ssize_t read;
-	char* line;
+	char data[BUFFSZ]; 
 	size_t len = 0;
+	int done;
 
 	XML_Parser p_ctrl = XML_ParserCreate("UTF-8");
 	if (!p_ctrl) {
@@ -41,19 +43,17 @@ int main(int argc, char *argv[])
 		exit(-1);
 	}
 
-	while ((read = getline(&line, &len, inXML)) != -1) {
-		printf("Line is %s", line);
-		enum XML_Status status = XML_Parse(p_ctrl, line, len, 0);
-		if (status == 0) {
+	do {
+		len = fread(data, 1, sizeof(data), inXML);
+		done = len < sizeof(data);
+
+		if (XML_Parse(p_ctrl, data, len, 0) == 0) {
 			enum XML_Error errcde = XML_GetErrorCode(p_ctrl);
 			printf("ERROR: %s\n", XML_ErrorString(errcde));
 			printf("Error at column number %lu\n", XML_GetCurrentColumnNumber(p_ctrl));
 			printf("Error at line number %lu\n", XML_GetCurrentLineNumber(p_ctrl));
 		}
-		free(line);
-		line = NULL;
-		len = 0;
-	}
+	} while(!done);
 
 	XML_ParserFree(p_ctrl);
 	fclose(inXML);
