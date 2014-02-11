@@ -45,6 +45,8 @@ void pageinst::setnext(pageinst* newinst)
 
 class pagechain
 {
+	friend ostream& operator<<(ostream& os, pagechain& pc);
+
 	private:
 	long page;
 	pageinst* head;
@@ -59,6 +61,12 @@ class pagechain
 	pageinst* gettail(void);
 	void settail(pageinst* newtail);
 };
+
+ostream& operator<<(ostream& os, pagechain& pc)
+{
+	os << pc.page;
+	return os;
+}
 
 bool pagechain::operator==(pagechain& pc) const
 {
@@ -152,6 +160,15 @@ void insertinstruction(long pagenumber, long instruction,
 		dummynode->getvalue().settail(nextinstruction);
 		nodetree->insertnode(dummynode, rootnode);
 	}
+}
+
+void showinorder(void* tree)
+{
+		redblacktree<redblacknode<pagechain> >* nodetree =
+			static_cast<redblacktree<redblacknode<pagechain> >*>
+				(tree);
+		nodetree->root->showinorder(nodetree->root);
+
 }
 
 } //end extern "C"

@@ -24,7 +24,7 @@ static void XMLCALL
 		instructioncnt++;
 		for (i = 0; attr[i]; i += 2) {
 			if (strcmp(attr[i], "address") == 0) {
-				address = atol(attr[i + 1]);
+				address = strtol(attr[i + 1], NULL, 16);
 				page = address >> BITSHIFT;
 				insertinstruction(page, instructioncnt,
 					redblacktree, getroot(redblacktree));
@@ -70,7 +70,7 @@ static void XMLCALL
 					len = fread(buffer, 1, sizeof(buffer),
 						referenceXML);
 					done = len < sizeof(buffer);
-					if (XML_Parse(refparse, data, len, 0)
+					if (XML_Parse(refparse, buffer, len, 0)
 							== 0) {
 						enum XML_Error errcde =
 							XML_GetErrorCode(refparse);
@@ -84,7 +84,9 @@ static void XMLCALL
 					XML_GetCurrentLineNumber(refparse));
 					}
 				} while(!done);
-				deletetree(redblacktree);			
+				printf("NOW THE TREE...\n");
+				showinorder(redblacktree);
+				deletetree(redblacktree);
 			}
 		}
 	}
