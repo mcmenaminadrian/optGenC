@@ -4,7 +4,9 @@
 #include <expat.h>
 
 #define BUFFSZ 512
-int instructioncnt;
+#define BITSHIFT 12
+long instructioncnt;
+void* redblacktree;
 
 //Copyright Adrian McMenamin, 2014
 //Licensed for use under GNU GPL v2
@@ -22,6 +24,16 @@ static void XMLCALL
 		instructioncnt++;
 		for (i = 0; attr[i]; i += 2) {
 			if (strcmp(attr[i], "address") == 0) {
+				long address = atol(attr[i + 1]);
+				long page = address >> BITSHIFT;
+				insertinstruction(page, instructioncnt,
+					redblacktree, getroot(redblacktree));
+			}
+		}
+		printf("Instruction count %i for page %i\n", instructioncnt, page);
+		break;
+	}
+
 }
 
 static void XMLCALL
@@ -55,6 +67,7 @@ static void XMLCALL
 					return;
 				}
 				instructioncnt = 0;
+				redblacktree = createtree();
 				do {
 					len = fread(buffer, 1, sizeof(buffer),
 						referenceXML);
@@ -72,7 +85,8 @@ static void XMLCALL
 					"Error at line number %lu\n",
 					XML_GetCurrentLineNumber(p_ctrl));
 					}
-				} while(!done);					
+				} while(!done);
+				deletetree(redblacktree);			
 			}
 		}
 	}
