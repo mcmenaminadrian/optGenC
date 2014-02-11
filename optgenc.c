@@ -10,17 +10,62 @@
 //or any later version at your discretion
 
 static void XMLCALL
+	refhandler(void *data, const XML_Char *name, const XML_Char **attr)
+{
+
+}
+
+static void XMLCALL
 	starthandler(void *data, const XML_Char *name, const XML_Char **attr)
 {
+	FILE *referenceXML;
+	char buffer[BUFFSZ];
 	int i;
+	int done;
+	int len;
+
 	if (strcmp(name, "file") == 0) {
 		for (i = 0; attr[i]; i += 2) {
 			if (strcmp(attr[i], "path") == 0) {
-				printf("File is at %s\n", attr[i + 1]);
+				XML_Parser refparse =
+					XML_ParserCreate("UTF-8");
+				if (!refparse) {
+					fprintf(stderr,
+						"Could not create parser\n");
+					return;
+				}
+				XML_SetStartElementHandler(refparse,
+						refhandler);
+				referenceXML = fopen(attr[i + 1], "r");
+				if (referenceXML == NULL) {
+					fprintf(stderr,
+						"Could not open %s\n",
+						attr[i + 1]);
+					XML_ParserFree(refparse);
+					return;
+				}
+				do {
+					len = fread(buffer, 1, sizeof(buffer),
+						referenceXML);
+					done = len < sizeof(buffer);
+					if (XML_Parse(p_ctrl, data, len, 0)
+							== 0) {
+						enum XML_Error errcde =
+							XML_GetErrorCode(p_ctrl);
+						printf("ERROR: %s\n",
+							XML_ErrorString(errcde));
+						printf(
+					"Error at column number %lu\n",
+					XML_GetCurrentColumnNumber(p_ctrl));
+						printf(
+					"Error at line number %lu\n",
+					XML_GetCurrentLineNumber(p_ctrl));
+					}
+				} while(!done);					
 			}
 		}
 	}
-}		
+}
 
 int main(int argc, char *argv[])
 {
