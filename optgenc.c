@@ -8,7 +8,7 @@
 #define BITSHIFT 12
 long instructioncnt;
 void* redblacktree;
-char* outputprefix;
+char outputprefix[BUFFSZ];
 char writeoutname[BUFFSZ];
 
 
