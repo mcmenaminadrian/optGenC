@@ -25,11 +25,7 @@ static void XMLCALL
 		strcmp(name, "store") == 0 || strcmp(name, "modify") == 0) {
 		instructioncnt++;
 		for (i = 0; attr[i]; i += 2) {
-			if (strcmp(attr[i], "thread") == 0) {
-				threadno = strtol(attr[i + 1], NULL, 10);
-				sprintf(writeoutname, "%s%lu.bin",
-					outputprefix, threadno);
-			}				
+
 			if (strcmp(attr[i], "address") == 0) {
 				address = strtol(attr[i + 1], NULL, 16);
 				page = address >> BITSHIFT;
@@ -52,6 +48,11 @@ static void XMLCALL
 
 	if (strcmp(name, "file") == 0) {
 		for (i = 0; attr[i]; i += 2) {
+			if (strcmp(attr[i], "thread") == 0) {
+				threadno = strtol(attr[i + 1], NULL, 10);
+				sprintf(writeoutname, "%s%lu.bin",
+					outputprefix, threadno);
+			}				
 			if (strcmp(attr[i], "path") == 0) {
 				XML_Parser refparse =
 					XML_ParserCreate("UTF-8");
