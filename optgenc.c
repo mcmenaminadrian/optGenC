@@ -30,7 +30,6 @@ static void XMLCALL
 					redblacktree, getroot(redblacktree));
 			}
 		}
-		printf("Instruction count %li for page %li\n", instructioncnt, page);
 	}
 
 }
