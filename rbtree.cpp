@@ -146,10 +146,10 @@ void writechain(pagechain* pc, FILE* fout)
 {
 	if (pc == NULL)
 		return;
-	fprintf("PAGE: %iu ", pc->getpage());
+	fprintf(fout, "PAGE: %iu ", pc->getpage());
 	pageinst* pi = pc->gethead();
 	while (pi) {
-		fprintf(",%iu", pi->getinst());
+		fprintf(fout, ",%iu", pi->getinst());
 		pi = pi->getnext();
 	}
 }
