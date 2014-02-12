@@ -9,7 +9,7 @@
 long instructioncnt;
 void* redblacktree;
 char* outputprefix;
-char writeoutname[BUFSZ];
+char writeoutname[BUFFSZ];
 
 
 //Copyright Adrian McMenamin, 2014
@@ -26,7 +26,7 @@ static void XMLCALL
 		instructioncnt++;
 		for (i = 0; attr[i]; i += 2) {
 			if (strcmp(attr[i], "thread") == 0) {
-				threadno = strtol(attr[i + 1], NULL, 10)
+				threadno = strtol(attr[i + 1], NULL, 10);
 				sprintf(writeoutname, "%s%iu.bin",
 					outputprefix, threadno);
 			}				
