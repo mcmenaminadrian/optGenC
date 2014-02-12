@@ -27,7 +27,7 @@ static void XMLCALL
 		for (i = 0; attr[i]; i += 2) {
 			if (strcmp(attr[i], "thread") == 0) {
 				threadno = strtol(attr[i + 1], NULL, 10);
-				sprintf(writeoutname, "%s%iu.bin",
+				sprintf(writeoutname, "%s%lu.bin",
 					outputprefix, threadno);
 			}				
 			if (strcmp(attr[i], "address") == 0) {

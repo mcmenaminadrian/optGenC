@@ -54,7 +54,7 @@ class pagechain
 
 	public:
 	pagechain(long where);
-	long getpage(void)
+	long getpage(void);
 	bool operator==(pagechain&) const;
 	bool operator<(pagechain&) const;
 	pageinst* gethead(void);
