@@ -89,7 +89,8 @@ template <typename T> void redblacknode<T>::showinorder(redblacknode<T>* node)
 	if (node == NULL)
 		return;
 	showinorder(node->left);
-	cout << node->value << ", ";
+	cout << node;
+//	cout << node->value << ", ";
 	showinorder(node->right);
 }
 
