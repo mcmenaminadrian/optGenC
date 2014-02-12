@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 #include "redblack.hpp"
 
 using namespace std;
@@ -125,7 +126,7 @@ void killchain(pageinst* pi)
 {
 	if (pi == NULL)
 		return;
-	pageinst* next = pi->next;
+	pageinst* next = pi->getnext();
 	killchain(next);
 	delete pi;
 	return;
@@ -137,7 +138,7 @@ void killtree(redblacknode<pagechain>* node)
 		return;
 	killtree(node->left);
 	killtree(node->right);
-	killchain(node->value.head);
+	killchain(node->getvalue().gethead());
 	return;
 }
 
@@ -146,9 +147,9 @@ void writechain(pagechain* pc, FILE* fout)
 	if (pc == NULL)
 		return;
 	fprintf("PAGE: %iu ", pc->getpage());
-	pageinst* pi = pc->head;
+	pageinst* pi = pc->gethead();
 	while (pi) {
-		fprintf(",%iu", pi->getinst();
+		fprintf(",%iu", pi->getinst());
 		pi = pi->getnext();
 	}
 }
@@ -157,8 +158,8 @@ void writeoutpages(redblacknode<pagechain>* node, FILE* fout)
 {
 	if (node == NULL)
 		return;
-	writeoutpages(node->left, fout)
-	writechain(node->value, fout);
+	writeoutpages(node->left, fout);
+	writechain(&node->getvalue(), fout);
 	writeoutpages(node->right, fout);
 }
 
