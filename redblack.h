@@ -2,9 +2,9 @@
 #define _REDBLACK_
 
 void* createtree(void);
-void deletetree(void*);
+void removetree(void*);
 void* getroot(void*);
 void insertinstruction(long, long, void*, void*);
-void showinorder(void*);
+void writeinorder(void*, FILE*);
 
 #endif

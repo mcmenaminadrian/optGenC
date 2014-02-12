@@ -54,6 +54,7 @@ class pagechain
 
 	public:
 	pagechain(long where);
+	long getpage(void)
 	bool operator==(pagechain&) const;
 	bool operator<(pagechain&) const;
 	pageinst* gethead(void);
@@ -66,6 +67,11 @@ ostream& operator<<(ostream& os, pagechain& pc)
 {
 	os << pc.page;
 	return os;
+}
+
+long pagechain::getpage(void)
+{
+	return page;
 }
 
 bool pagechain::operator==(pagechain& pc) const
@@ -115,6 +121,46 @@ void pagechain::settail(pageinst* newtail)
 		head = newtail;
 }
 
+void killchain(pageinst* pi)
+{
+	if (pi == NULL)
+		return;
+	pageinst* next = pi->next;
+	killchain(next);
+	delete pi;
+	return;
+}
+
+void killtree(redblacknode<pagechain>* node)
+{
+	if (node == NULL)
+		return;
+	killtree(node->left);
+	killtree(node->right);
+	killchain(node->value.head);
+	return;
+}
+
+void writechain(pagechain* pc, FILE* fout)
+{
+	if (pc == NULL)
+		return;
+	fprintf("PAGE: %iu ", pc->getpage());
+	pageinst* pi = pc->head;
+	while (pi) {
+		fprintf(",%iu", pi->getinst();
+		pi = pi->getnext();
+	}
+}
+
+void writeoutpages(redblacknode<pagechain>* node, FILE* fout)
+{
+	if (node == NULL)
+		return;
+	writeoutpages(node->left, fout)
+	writechain(node->value, fout);
+	writeoutpages(node->right, fout);
+}
 
 extern "C" {
 
@@ -125,9 +171,13 @@ void* createtree(void)
 	return static_cast<void*>(tree);
 }
 
-void deletetree(void* tree)
+void removetree(void* tree)
 {
-	delete (static_cast<redblacktree<redblacknode<pagechain> >* >(tree));
+	redblacktree<redblacknode<pagechain> >* rbtree;
+	rbtree = (static_cast<redblacktree<redblacknode<pagechain> >* >(tree));
+	killtree(rbtree->root);
+	delete rbtree;
+	tree = NULL;
 }
 
 void* getroot(void* tree)
@@ -162,13 +212,13 @@ void insertinstruction(long pagenumber, long instruction,
 	}
 }
 
-void showinorder(void* tree)
+void writeinorder(void* tree, FILE* fileout)
 {
-		redblacktree<redblacknode<pagechain> >* nodetree =
-			static_cast<redblacktree<redblacknode<pagechain> >*>
-				(tree);
-		nodetree->root->showinorder(nodetree->root);
-
+	redblacktree<redblacknode<pagechain> >* nodetree =
+	static_cast<redblacktree<redblacknode<pagechain> >*>
+		(tree);
+	
+	writeoutpages(nodetree->root, fileout);
 }
 
 } //end extern "C"

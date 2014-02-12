@@ -8,6 +8,8 @@
 #define BITSHIFT 12
 long instructioncnt;
 void* redblacktree;
+char* outputprefix;
+char writeoutname[BUFSZ];
 
 
 //Copyright Adrian McMenamin, 2014
@@ -18,11 +20,16 @@ static void XMLCALL
 	refhandler(void *data, const XML_Char *name, const XML_Char **attr)
 {
 	int i;
-	long page, address;
+	long page, address, threadno;
 	if (strcmp(name, "instruction") == 0 || strcmp(name, "load") == 0 ||
 		strcmp(name, "store") == 0 || strcmp(name, "modify") == 0) {
 		instructioncnt++;
 		for (i = 0; attr[i]; i += 2) {
+			if (strcmp(attr[i], "thread") == 0) {
+				threadno = strtol(attr[i + 1], NULL, 10)
+				sprintf(writeoutname, "%s%iu.bin",
+					outputprefix, threadno);
+			}				
 			if (strcmp(attr[i], "address") == 0) {
 				address = strtol(attr[i + 1], NULL, 16);
 				page = address >> BITSHIFT;
@@ -83,9 +90,12 @@ static void XMLCALL
 					XML_GetCurrentLineNumber(refparse));
 					}
 				} while(!done);
-				printf("NOW THE TREE...\n");
-				showinorder(redblacktree);
-				deletetree(redblacktree);
+				printf("Now writing %s ... ", writeoutname);
+				FILE *pageout = fopen(writeoutname, "w");
+				writeinorder(redblacktree, pageout);
+				printf("complete.\n");
+				removetree(redblacktree);
+				fclose(pageout);
 			}
 		}
 	}
@@ -97,6 +107,8 @@ int main(int argc, char *argv[])
 	char data[BUFFSZ]; 
 	size_t len = 0;
 	int done;
+
+	strcpy(outputprefix, argv[2]);
 
 	XML_Parser p_ctrl = XML_ParserCreate("UTF-8");
 	if (!p_ctrl) {
