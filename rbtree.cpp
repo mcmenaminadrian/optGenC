@@ -145,7 +145,7 @@ void insertinstruction(long pagenumber, long instruction,
 	redblacknode<pagechain> *rootnode, *pagenode, *dummynode;
 	redblacktree<redblacknode<pagechain> >* nodetree;
 		
-	pagechain dummychain = pagechain(instruction);
+	pagechain dummychain = pagechain(pagenumber);
 	rootnode = static_cast<redblacknode<pagechain>*>(root);
 	nodetree = static_cast<redblacktree<redblacknode<pagechain> >* >(tree);
 
