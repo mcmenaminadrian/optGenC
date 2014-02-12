@@ -20,7 +20,7 @@ static void XMLCALL
 	refhandler(void *data, const XML_Char *name, const XML_Char **attr)
 {
 	int i;
-	long page, address, threadno;
+	long page, address;
 	if (strcmp(name, "instruction") == 0 || strcmp(name, "load") == 0 ||
 		strcmp(name, "store") == 0 || strcmp(name, "modify") == 0) {
 		instructioncnt++;
@@ -45,6 +45,7 @@ static void XMLCALL
 	int i;
 	int done;
 	int len;
+	long threadno;
 
 	if (strcmp(name, "file") == 0) {
 		for (i = 0; attr[i]; i += 2) {
