@@ -127,9 +127,8 @@ void killchain(pageinst* pi)
 	if (pi == NULL)
 		return;
 	pageinst* next = pi->getnext();
-	killchain(next);
 	delete pi;
-	return;
+	killchain(next);
 }
 
 void killtree(redblacknode<pagechain>* node)
@@ -139,7 +138,6 @@ void killtree(redblacknode<pagechain>* node)
 	killtree(node->left);
 	killtree(node->right);
 	killchain(node->getvalue().gethead());
-	return;
 }
 
 void writechain(pagechain* pc, FILE* fout)
