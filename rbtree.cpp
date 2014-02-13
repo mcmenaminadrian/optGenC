@@ -152,6 +152,7 @@ void writechain(pagechain* pc, FILE* fout)
 		fprintf(fout, ",%li", pi->getinst());
 		pi = pi->getnext();
 	}
+	fprintf(fout, "\n");
 }
 
 void writeoutpages(redblacknode<pagechain>* node, FILE* fout)
