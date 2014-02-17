@@ -177,7 +177,6 @@ void removetree(void* tree)
 	rbtree = (static_cast<redblacktree<redblacknode<pagechain> >* >(tree));
 	killtree(rbtree->root);
 	delete rbtree;
-	tree = NULL;
 }
 
 void* getroot(void* tree)
