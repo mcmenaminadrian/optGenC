@@ -217,7 +217,7 @@ void writeinorder(void* tree, char* filenameout)
 	redblacktree<redblacknode<pagechain> >* nodetree =
 	static_cast<redblacktree<redblacknode<pagechain> >*>
 		(tree);
-	ofstream fileout(filenameout);
+	ofstream fileout(filenameout, ios::out | ios::trunc | ios::binary);
 	writeoutpages(nodetree->root, fileout);
 }
 
