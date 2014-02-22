@@ -145,13 +145,13 @@ void writechain(pagechain* pc, ofstream& fout)
 {
 	if (pc == NULL)
 		return;
-	fout << pc->getpage();
+	fout.write((char*)pc->getpage(), sizeof(long));
 	pageinst* pi = pc->gethead();
 	while (pi) {
-		fout << pi->getinst();
+		fout.write((char*)pi->getinst(), sizeof(long));
 		pi = pi->getnext();
 	}
-	fout << 0L;
+	fout.write((char*)0L, sizeof(long));
 }
 
 void writeoutpages(redblacknode<pagechain>* node, ofstream& fout)
