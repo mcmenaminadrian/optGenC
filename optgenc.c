@@ -93,11 +93,9 @@ static void XMLCALL
 					}
 				} while(!done);
 				printf("Now writing %s ... ", writeoutname);
-				FILE *pageout = fopen(writeoutname, "w");
-				writeinorder(redblacktree, pageout);
+				writeinorder(redblacktree, writeoutname);
 				printf("complete.\n");
 				removetree(redblacktree);
-				fclose(pageout);
 			}
 		}
 	}

@@ -5,6 +5,6 @@ void* createtree(void);
 void removetree(void*);
 void* getroot(void*);
 void insertinstruction(long, long, void*, void*);
-void writeinorder(void*, FILE*);
+void writeinorder(void*, char*);
 
 #endif

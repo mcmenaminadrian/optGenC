@@ -140,20 +140,20 @@ void killtree(redblacknode<pagechain>* node)
 	killchain(node->getvalue().gethead());
 }
 
-void writechain(pagechain* pc, FILE* fout)
+void writechain(pagechain* pc, ofstream& fout)
 {
 	if (pc == NULL)
 		return;
-	fprintf(fout, "PAGE: %li ", pc->getpage());
+	ofstream << pc->getpage();
 	pageinst* pi = pc->gethead();
 	while (pi) {
-		fprintf(fout, ",%li", pi->getinst());
+		ofstream << pi->getinst();
 		pi = pi->getnext();
 	}
-	fprintf(fout, "\n");
+	ofstream << 0L;
 }
 
-void writeoutpages(redblacknode<pagechain>* node, FILE* fout)
+void writeoutpages(redblacknode<pagechain>* node, ofstream& fout)
 {
 	if (node == NULL)
 		return;
@@ -211,12 +211,12 @@ void insertinstruction(long pagenumber, long instruction,
 	}
 }
 
-void writeinorder(void* tree, FILE* fileout)
+void writeinorder(void* tree, char* filenameout)
 {
 	redblacktree<redblacknode<pagechain> >* nodetree =
 	static_cast<redblacktree<redblacknode<pagechain> >*>
 		(tree);
-	
+	ofstream fileout(filenameout)
 	writeoutpages(nodetree->root, fileout);
 }
 
