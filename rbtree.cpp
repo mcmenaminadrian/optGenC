@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <cstdio>
 #include "redblack.hpp"
 
@@ -144,13 +145,13 @@ void writechain(pagechain* pc, ofstream& fout)
 {
 	if (pc == NULL)
 		return;
-	ofstream << pc->getpage();
+	fout << pc->getpage();
 	pageinst* pi = pc->gethead();
 	while (pi) {
-		ofstream << pi->getinst();
+		fout << pi->getinst();
 		pi = pi->getnext();
 	}
-	ofstream << 0L;
+	fout << 0L;
 }
 
 void writeoutpages(redblacknode<pagechain>* node, ofstream& fout)
@@ -216,7 +217,7 @@ void writeinorder(void* tree, char* filenameout)
 	redblacktree<redblacknode<pagechain> >* nodetree =
 	static_cast<redblacktree<redblacknode<pagechain> >*>
 		(tree);
-	ofstream fileout(filenameout)
+	ofstream fileout(filenameout);
 	writeoutpages(nodetree->root, fileout);
 }
 
