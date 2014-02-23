@@ -19,7 +19,7 @@ class pageinst
 
 	public:
 	pageinst(long inst);
-	long getinst(void);
+	long* getinst(void);
 	pageinst* getnext(void);
 	void setnext(pageinst* newinst);
 };
@@ -30,9 +30,9 @@ pageinst::pageinst(long inst)
 	next = NULL;
 }
 
-long pageinst::getinst(void)
+long* pageinst::getinst(void)
 {
-	return instruction;
+	return &instruction;
 }
 
 pageinst* pageinst::getnext(void)
@@ -56,7 +56,7 @@ class pagechain
 
 	public:
 	pagechain(long where);
-	long getpage(void);
+	long* getpage(void);
 	bool operator==(pagechain&) const;
 	bool operator<(pagechain&) const;
 	pageinst* gethead(void);
@@ -71,9 +71,9 @@ ostream& operator<<(ostream& os, pagechain& pc)
 	return os;
 }
 
-long pagechain::getpage(void)
+long* pagechain::getpage(void)
 {
-	return page;
+	return &page;
 }
 
 bool pagechain::operator==(pagechain& pc) const
@@ -151,7 +151,8 @@ void writechain(pagechain* pc, ofstream& fout)
 		fout.write((char*)pi->getinst(), sizeof(long));
 		pi = pi->getnext();
 	}
-	fout.write((char*)0L, sizeof(long));
+	long x = 0;
+	fout.write((char*)&x, sizeof(long));
 }
 
 void writeoutpages(redblacknode<pagechain>* node, ofstream& fout)
