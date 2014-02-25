@@ -6,7 +6,7 @@
 
 #define BUFFSZ 512
 #define BITSHIFT 12
-long instructioncnt;
+unsigned long instructioncnt;
 void* redblacktree;
 char outputprefix[BUFFSZ];
 char writeoutname[BUFFSZ];
@@ -20,7 +20,7 @@ static void XMLCALL
 	refhandler(void *data, const XML_Char *name, const XML_Char **attr)
 {
 	int i;
-	long page, address;
+	unsigned long page, address;
 	if (strcmp(name, "instruction") == 0 || strcmp(name, "load") == 0 ||
 		strcmp(name, "store") == 0 || strcmp(name, "modify") == 0) {
 		instructioncnt++;

@@ -14,23 +14,23 @@ using namespace std;
 class pageinst
 {
 	private:
-	long instruction;
+	unsigned long instruction;
 	pageinst* next;
 
 	public:
-	pageinst(long inst);
-	long* getinst(void);
+	pageinst(unsigned long inst);
+	unsigned long* getinst(void);
 	pageinst* getnext(void);
 	void setnext(pageinst* newinst);
 };
 
-pageinst::pageinst(long inst)
+pageinst::pageinst(unsigned long inst)
 {
 	instruction = inst;
 	next = NULL;
 }
 
-long* pageinst::getinst(void)
+unsigned long* pageinst::getinst(void)
 {
 	return &instruction;
 }
@@ -50,13 +50,13 @@ class pagechain
 	friend ostream& operator<<(ostream& os, pagechain& pc);
 
 	private:
-	long page;
+	unsigned long page;
 	pageinst* head;
 	pageinst* tail;
 
 	public:
-	pagechain(long where);
-	long* getpage(void);
+	pagechain(unsigned long where);
+	unsigned long* getpage(void);
 	bool operator==(pagechain&) const;
 	bool operator<(pagechain&) const;
 	pageinst* gethead(void);
@@ -71,7 +71,7 @@ ostream& operator<<(ostream& os, pagechain& pc)
 	return os;
 }
 
-long* pagechain::getpage(void)
+unsigned long* pagechain::getpage(void)
 {
 	return &page;
 }
@@ -86,7 +86,7 @@ bool pagechain::operator<(pagechain& pc) const
 	return (page < pc.page);
 }
 
-pagechain::pagechain(long where)
+pagechain::pagechain(unsigned long where)
 {
 	page = where;
 	head = NULL;
@@ -151,7 +151,7 @@ void writechain(pagechain* pc, ofstream& fout)
 		fout.write((char*)pi->getinst(), sizeof(long));
 		pi = pi->getnext();
 	}
-	long x = 0;
+	unsigned long x = 0;
 	fout.write((char*)&x, sizeof(long));
 }
 
@@ -190,7 +190,7 @@ void* getroot(void* tree)
 
 //if node for this page exists add to its tail
 //if node for this page does not exist, create and add to tail
-void insertinstruction(long pagenumber, long instruction, 
+void insertinstruction(unsigned long pagenumber, unsigned long instruction, 
 	void* tree, void* root)
 {
 	redblacknode<pagechain> *rootnode, *pagenode, *dummynode;
