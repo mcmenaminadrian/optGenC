@@ -47,8 +47,6 @@ void pageinst::setnext(pageinst* newinst)
 
 class pagechain
 {
-	friend ostream& operator<<(ostream& os, pagechain& pc);
-
 	private:
 	unsigned long page;
 	pageinst* head;
@@ -64,12 +62,6 @@ class pagechain
 	pageinst* gettail(void);
 	void settail(pageinst* newtail);
 };
-
-ostream& operator<<(ostream& os, pagechain& pc)
-{
-	os << pc.page;
-	return os;
-}
 
 unsigned long* pagechain::getpage(void)
 {
@@ -190,9 +182,10 @@ void* getroot(void* tree)
 
 //if node for this page exists add to its tail
 //if node for this page does not exist, create and add to tail
-void insertinstruction(unsigned long pagenumber, unsigned long instruction, 
-	void* tree, void* root)
+void insertinstruction(long pn, long ins, void* tree, void* root)
 {
+	unsigned long pagenumber = static_cast<unsigned long>(pn);
+	unsigned long instruction = static_cast<unsigned long>(ins);
 	redblacknode<pagechain> *rootnode, *pagenode, *dummynode;
 	redblacktree<redblacknode<pagechain> >* nodetree;
 		
